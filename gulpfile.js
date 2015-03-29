@@ -39,7 +39,7 @@ gulp.task('serve', function () {
 });
 
 gulp.task('publish', ['compile'], function() {
-  return gulp.src(['index.html', 'revealjs/**', 'dist/*'])
+  return gulp.src(['index.html', '**.css', '**.js'])
     .pipe(ghPages());
 });
 
