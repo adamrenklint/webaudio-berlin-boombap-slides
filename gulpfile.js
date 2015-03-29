@@ -38,10 +38,9 @@ gulp.task('serve', function () {
   });
 });
 
-gulp.task('deploy', function() {
+gulp.task('publish', function() {
   return gulp.src(['index.html', 'revealjs/**', 'dist/**'])
     .pipe(ghPages());
 });
-// gulp.task('publish');
 
 gulp.task('default', ['compile', 'watch', 'serve']);
