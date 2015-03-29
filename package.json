@@ -1,25 +1,48 @@
 {
-  "name": "dilla-boombap-webaudio-berlin-slides",
-  "version": "0.0.1",
-  "description": "Slides for 'Making a boombap beat with dilla and Web Audio' at Berlin Web Audio meetup",
-  "private": true,
+  "name": "reveal.js",
+  "version": "3.0.0",
+  "description": "The HTML Presentation Framework",
+  "homepage": "http://lab.hakim.se/reveal-js",
+  "subdomain": "revealjs",
+  "scripts": {
+    "test": "grunt test",
+    "start": ""
+  },
+  "author": {
+    "name": "Hakim El Hattab",
+    "email": "hakim.elhattab@gmail.com",
+    "web": "http://hakim.se"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/adamrenklint/dilla-boombap-webaudio-berlin-slides.git"
+    "url": "git://github.com/hakimel/reveal.js.git"
   },
-  "author": "Adam Renklint <adam@renklint.com> (http://adamrenklint.com)",
-  "bugs": {
-    "url": "https://github.com/adamrenklint/dilla-boombap-webaudio-berlin-slides/issues"
+  "engines": {
+    "node": "~0.10.0"
   },
-  "homepage": "https://github.com/adamrenklint/dilla-boombap-webaudio-berlin-slides",
+  "dependencies": {
+    "underscore": "~1.5.1",
+    "express": "~2.5.9",
+    "mustache": "~0.7.2",
+    "socket.io": "~0.9.16"
+  },
   "devDependencies": {
-    "dilla": "^1.3.3",
-    "gulp": "^3.8.11",
-    "gulp-browserify": "^0.5.1",
-    "gulp-connect": "^2.2.0",
-    "gulp-gh-pages": "^0.5.0",
-    "gulp-modified": "^0.9.0",
-    "gulp-plumber": "^1.0.0",
-    "gulp-stylus": "^2.0.1"
-  }
+    "grunt-contrib-qunit": "~0.5.2",
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-contrib-cssmin": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.4",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-sass": "~0.14.0",
+    "grunt-contrib-connect": "~0.8.0",
+    "grunt-autoprefixer": "~1.0.1",
+    "grunt-zip": "~0.7.0",
+    "grunt": "~0.4.0",
+    "node-sass": "~0.9.3"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/hakimel/reveal.js/blob/master/LICENSE"
+    }
+  ]
 }
