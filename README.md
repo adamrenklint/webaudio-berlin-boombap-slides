@@ -1,9 +1,11 @@
 # dilla-boombap-webaudio-berlin-slides
-Slides for "Making a boombap beat with dilla and Web Audio" at [Web Audio Berlin meetup](www.meetup.com/Berlin-Web-Audio-Meetup/)
+Slides for "Making a boombap beat with Dilla and the Web Audio API" at [Web Audio Berlin meetup](www.meetup.com/Berlin-Web-Audio-Meetup/)
+
+> An introduction to composing music with code, using the browser as sequencer runtime and Javascript to schedule notes with precise rhythmic timing.
 
 - Using [reveal.js](https://github.com/hakimel/reveal.js)
 - Based on the tutorials:
-  - [Making a boombap beat with dilla and the Web Audio API]
+  - [Making a boombap beat with Dilla and the Web Audio API]
   - [Using expressions in dilla]
 
 ## Develop

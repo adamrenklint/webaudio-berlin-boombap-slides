@@ -1,9 +1,29 @@
+$white = white
+$primary = #3c7fc1
+$error = #b30000
+$dark = #444
+$light = #ccc
+
 body
-  background-color red
+  font-family 'Source Serif Pro', serif
+  background-color $white
+  color $primary
+  font-size 4em
+  line-height 1.4
 
 .reveal
 
+  a
+    color $primary
+    text-decoration none
+    // font-weight bold
+
   h1
-    font-size 3em
-    color white
-    display block
+    font-size 150%
+    font-weight bold
+
+  strong
+    font-weight bold
+
+  .inverted
+    color $white

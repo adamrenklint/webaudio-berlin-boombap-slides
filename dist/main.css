@@ -1,8 +1,21 @@
 body {
-  background-color: #f00;
+  font-family: 'Source Serif Pro', serif;
+  background-color: #fff;
+  color: #3c7fc1;
+  font-size: 4em;
+  line-height: 1.4;
+}
+.reveal a {
+  color: #3c7fc1;
+  text-decoration: none;
 }
 .reveal h1 {
-  font-size: 3em;
+  font-size: 150%;
+  font-weight: bold;
+}
+.reveal strong {
+  font-weight: bold;
+}
+.reveal .inverted {
   color: #fff;
-  display: block;
 }
