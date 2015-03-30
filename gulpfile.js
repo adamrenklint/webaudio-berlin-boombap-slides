@@ -8,7 +8,7 @@ var ghPages = require('gulp-gh-pages');
 var filter = require('gulp-filter');
 
 gulp.task('compile:styles', function () {
-  gulp.src('src/styles/main.styl')
+  return gulp.src('src/styles/main.styl')
     .pipe(plumber())
     .pipe(modified('styles'))
     .pipe(stylus())
@@ -17,13 +17,13 @@ gulp.task('compile:styles', function () {
 });
 
 gulp.task('compile:html', function () {
-  gulp.src('index.html')
-  .pipe(plumber())
-  .pipe(connect.reload());
+  return gulp.src('index.html')
+    .pipe(plumber())
+    .pipe(connect.reload());
 });
 
 gulp.task('compile:scripts', function () {
-  gulp.src('src/scripts/main.js')
+  return gulp.src('src/scripts/main.js')
     .pipe(plumber())
     .pipe(modified('scripts'))
     .pipe(browserify())
@@ -47,14 +47,19 @@ gulp.task('serve', function () {
 });
 
 gulp.task('publish', ['compile'], function() {
-  return gulp.src(['index.html', '**/*.css', '**/*.js', 'revealjs/lib/**'])
-    .pipe(filter([
+  return gulp.src([
+      'index.html',
+      '**/*.css',
+      '**/*.js',
+      '**/*.woff',
+      '**/*.eot',
+      '**/*.ttf'
+    ]).pipe(filter([
       '**',
       '!node_modules/**',
       '!src/**',
       '!gulpfile.js'
-    ]))
-    .pipe(ghPages());
+    ])).pipe(ghPages());
 });
 
 gulp.task('default', ['compile', 'watch', 'serve']);
