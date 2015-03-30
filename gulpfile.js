@@ -5,6 +5,7 @@ var modified = require('gulp-modified');
 var connect = require('gulp-connect');
 var plumber = require('gulp-plumber');
 var ghPages = require('gulp-gh-pages');
+var filter = require('gulp-filter');
 
 gulp.task('compile:styles', function () {
   gulp.src('src/styles/main.styl')
@@ -13,6 +14,12 @@ gulp.task('compile:styles', function () {
     .pipe(stylus())
     .pipe(connect.reload())
     .pipe(gulp.dest('dist'));
+});
+
+gulp.task('compile:html', function () {
+  gulp.src('index.html')
+  .pipe(plumber())
+  .pipe(connect.reload());
 });
 
 gulp.task('compile:scripts', function () {
@@ -24,11 +31,12 @@ gulp.task('compile:scripts', function () {
     .pipe(gulp.dest('dist'));
 });
 
-gulp.task('compile', ['compile:scripts', 'compile:styles']);
+gulp.task('compile', ['compile:scripts', 'compile:styles', 'compile:html']);
 
 gulp.task('watch', function () {
   gulp.watch(['src/scripts/**'], ['compile:scripts']);
   gulp.watch(['src/styles/**'], ['compile:styles']);
+  gulp.watch(['index.html'], ['compile:html']);
 });
 
 gulp.task('serve', function () {
@@ -39,7 +47,13 @@ gulp.task('serve', function () {
 });
 
 gulp.task('publish', ['compile'], function() {
-  return gulp.src(['index.html', '**/*.css', '**/*.js'])
+  return gulp.src(['index.html', '**/*.css', '**/*.js', 'revealjs/lib/**'])
+    .pipe(filter([
+      '**',
+      '!node_modules/**',
+      '!src/**',
+      '!gulpfile.js'
+    ]))
     .pipe(ghPages());
 });
 
