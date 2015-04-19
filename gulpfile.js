@@ -57,13 +57,17 @@ gulp.task('serve', function () {
   });
 });
 
-gulp.task('publish', ['compile'], function() {
+gulp.task('publish', ['copy', 'compile'], function() {
   return gulp.src([
       'index.html',
       '**/*.css',
       '**/*.js',
       '**/*.woff',
       '**/*.eot',
+      '**/*.wav',
+      '**/*.jpeg',
+      '**/*.jpg',
+      '**/*.png',
       '**/*.ttf'
     ]).pipe(filter([
       '**',
