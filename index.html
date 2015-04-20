@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 
-		<title>Making beats with Dilla, Bap and the Web Audio API</title>
+		<title>Making beats with Bap and the Web Audio API</title>
 
 		<meta name="description" content="">
 		<meta name="author" content="Adam Renklint">
@@ -32,13 +32,14 @@
 
 			<div class="slides">
 				<section data-background="#3c7fc1" class="inverted">
-					<h1>Making beats with Dilla, Bap and the Web Audio API</h1>
+					<h1>Making beats<br>with Bap and the Web Audio API</h1>
 				</section>
 
 				<section>
 					<h3>An introduction to composing <strong>music with code</strong>, using the browser as sequencer runtime and Javascript to schedule notes with <strong>precise rhythmic timing</strong></h3>
 					<aside class="notes">
-						Basically, we're gonna make beats with code and play them in modern browsers.
+						<li>in short, we're gonna make beats</li>
+						<li>that can be played in modern browsers</li>
 					</aside>
 				</section>
 
@@ -47,7 +48,10 @@
 					<h3>#javascript #frontend #nodejs</h3>
 					<h3><a href="https://www.wunderlist.com" target="_blank">@wunderlist</a> <a href="http://www.6wunderkinder.com" target="_blank">@6wunderkinder</a></h3>
 					<aside class="notes">
-						So, who am I? My dayjob is as a Javascript Developer at 6Wunderkinder here in Berlin, building Wunderlist, home of the worlds lists and tasks.
+						<li>who am I?</li>
+						<li>my name is Adam</li>
+						<li>javascript developer at 6Wunderkinder</li>
+						<li>building Wunderlist, home of the worlds lists and tasks</li>
 					</aside>
 				</section>
 
@@ -56,137 +60,107 @@
 					<h3>#webaudio #beatmaking</h3>
 					<h3><a target="_blank" href="http://adamrenklint.com">adamrenklint.com</a></h3>
 					<aside class="notes">
-						Aside from that, I'm into making music, mainly instrumental hiphop. Sometimes I'm tweetering and posting stuff on my website.
+						<li>aside from that, into making music</li>
+						<li>mainly instrumental hiphop, golden era and boombap style</li>
 					</aside>
 				</section>
 
 				<section>
 					<img src="images/mpc60.jpeg" style="width:100%;">
-					<aside class="notes">A decade ago, I layed my hands on an MPC60 for the first time. It was love at first sight, and the reason was not just the 16 pads that everyone holds as the main selling point of a drum machine of this nature.
+					<aside class="notes">
+						<li>a decade ago, first hands on MPC60</li>
+						<li>love at first sight</li>
+						<li>but not because the 16 pads that most people see as the main benefit</li>
 				</section>
 
 				<section>
 					<img src="images/mpc_events.jpg" style="width:100%;">
-					<aside class="notes">The MPC had an editable "event view" that captured all aspects of a sequence of notes. For the first time, I - a person with musical interest but no musical talent or training - could reason and talk about the details of beatmaking.</aside>
+					<aside class="notes">
+						<li>had an editable "events view"</li>
+						<li>captures all aspects of a sequence of notes</li>
+						<li>for the first time, I could reason and talk about the process of making beats</li></aside>
 				</section>
 
 				<section>
 					<div>web audio + javascript = &lt;3</div>
-					<aside class="notes">Fast forward a decade, and I find myself having fallen in love again. The browser as a sequencer runtime is at its infancy, and I'm excited to be part of hacking the process of making music, as well as being in the position of being able to *build my own instruments*.</aside>
-				</section>
-
-				<section data-background="#3c7fc1" class="inverted">
-					<h1>Dilla</h1>
-					<aside class="notes">I wanted to build something small to get me started with Web Audio, so I made Dilla - a library to schedule Web Audio events with precise timing and rhythm.</a>
-				</section>
-
-				<section>
-					Based on 96 ticks per beat, with position signatures like on MPC:<br>
-					<h1>1.1.01 - 1.4.96</h1>
-					<aside class="notes">I wanted to capture something of what excited me in the first place about the MPC, so this was my starting point: 96 ticks per beat.</a>
-				</section>
-
-				<section>
-					Add some notes
-					<pre><code class="javascript">
-dilla.set('kick', [
-  ['1.1.01'],
-  ['1.1.52', { gain: 0.8 }],
-  ['1.3.49']
-]);
-dilla.set('snare', [
-  ['1.even.01']
-]);
-					</code></pre>
-					<aside class="notes">This is the main API of Dilla - you attach an array of events with positions to an id, in this case the sound. The snare uses an expression, and will be expanded into two notes: one at 1.2.01, the other at 1.4.01.<aside>
-				</section>
-
-				<section>
-					Load samples with XHR
-					<pre><code class="javascript">
-var sounds = {};
-function loadSound (name, done) {
-  var request = new XMLHttpRequest();
-  request.open('GET', 'sounds/' + name + '.wav', true);
-  // Make sure to set the response type to "arrayBuffer"
-  request.responseType = 'arraybuffer';
-  request.onload = function soundWasLoaded () {
-    ac.decodeAudioData(request.response, function (buffer) {
-      sounds[name] = buffer;
-      done();
-    });
-  };
-  request.send();
-}
-					</code></pre>
-					<aside class="notes">Every sound must be fetched and decoded, and make sure to set the responsetype to arraybuffer.<aside>
-				</section>
-
-				<section>
-					Listen for step and play sound
-					<pre><code class="javascript">
-dilla.on('step', function onStep (step) {
-  var source = ac.createBufferSource();
-  source.buffer = sounds[step.id];
-  var gainNode = source.gainNode = ac.createGain();
-  var gainVolume = step.args.gain || 1;
-  source.connect(gainNode);
-  gainNode.connect(ac.destination);
-  gainNode.gain.value = gainVolume;
-  source.start(step.time);
-});
-					</code></pre>
-					<aside class="notes">Finally, we listen for Dilla's *step* event to play the sound buffer. In this example, we only care about gain. But really, there are many other params that you would want to be able to control: attack, decay, sustain, release, pan, pitch, etc.<aside>
-				</section>
-
-				<section>
-					That's a lot of boilerplate<br>to play some drums...
-					<aside class="notes">I published a few tutorials on how to use Dilla, but quickly realized that it was not powerful enough for me to use myself. Too much repetition and boilerplate - not enough time making beats and sample kits.</aside>
+					<aside class="notes">
+						<li>fast forward a decade</li>
+						<li>find myself fallen in love again</li>
+						<li>browser as a sequencer runtime is at its infancy</li>
+						<li>excited to be part of hacking the process of making music</li>
+						<li>as JS dev, now able to build my own instruments and beatmaking toolbox</li>
 				</section>
 
 				<section data-background="#3c7fc1" class="inverted">
 					<h1>Bap</h1>
-					<aside class="notes">So I did what developers do, abstract. I built another library on top of Dilla, called Bap, after my favourite hiphop subgenre.</a>
-				</section>
-
-				<section>
-					A small toolkit for <strong>making beats</strong> with Javascript and Web Audio for playback in modern browsers
-					<aside class="notes">I say making beats, but really, it's all about building kits and instruments from samples and oscillators, and sequencing them.</aside>
+					<aside class="notes">
+						<li>so I built Bap</li>
+						<li>A small toolkit for <strong>making beats</strong> with Javascript and Web Audio for playback in modern browsers</li>
+						<li>named after the boombap subgenre</li>
+					</aside>
 				</section>
 
 				<section>
 					Inspired by the "MPC workflow" and built to make all aspects of beatmaking completely <strong>modular</strong> and <strong>reusable</strong>.
-					<aside class="notes">By MPC workflow I mean: find a sample, chop that sample, sequence that sample. I'm not touching pad triggering, yet. Each part of a beat can be its own CommonJS module, allowing for great reusability, and maybe even sharing.</aside>
+					<aside class="notes">
+						<li>MPC workflow = find and chop sample, sequence slices</li>
+						<li>each fragment of a bap beat be its own commonJS module</li>
+						<li>great re-usability and collaboration with existing dev tools</li>
+					</aside>
 				</section>
 
 				<section>
-					<strong>Kit</strong> are like instruments and contains infinite <strong>slots</strong>, each with infinite <strong>layers</strong> of samples and oscillators
-					<aside class="notes">So how does it work. You create a kit - a program in MPC terms, and connect samples and oscillators into slots</aside>
+				  Based on 96 ticks per beat, with position signatures like MPC60<br>
+				  <h1>1.1.01 - 1.4.96</h1>
+				  <aside class="notes">
+						<li>uses same timing and position format as oldschool MPCs</li>
+						<li>meaning one normal bar goes from 1.1.01 to 1.4.96</li>
+					</aside>
+				</section>
+
+				<section>
+					<strong>Kits</strong> are like instruments and contains infinite <strong>slots</strong>, each with infinite <strong>layers</strong> of samples and oscillators
+					<aside class="notes">
+						<li>Let's look at the fundamental concepts</li>
+						<li>kits are instruments, or programs in mpc terms</li>
+						<li>they have slots, which contain infinite layers</li>
+					</aside>
 				</section>
 
 				<section>
 					<strong>Patterns</strong> are playable collections of <strong>channels</strong> containing <strong>notes</strong>, and connect with kits
-					<aside class="notes"></aside>
+					<aside class="notes">
+						<li>patterns are playable loops, that contain channels, that contains notes</li>
+						<li>the developer connects a pattern with one or more kits</li>
+					</aside>
 				</section>
 
 				<section>
-					The note shorthand
+					Note parameters
 					<pre><code class="javascript">
- position key   duration vol pitch pan
-['1.101', 'A2', 49,      75, -50,  100, {...}]
+ position  key    duration  vol  pitch  pan  other
+['1.101',  'A2',  49,       75,  -50,   100, {...}]
 
 </code></pre>
-					<aside class="notes">All paramters can be set with an object, but these six are the most imporant: position, key (combination of kit and slot), duration in ticks, volume, pitch and pan.<aside>
+					<aside class="notes">
+						<li>notes can have lots of different parameters</li>
+						<li>but six are most important, and have shorthand syntax</li>
+						<li>position, key, duration in ticks, volume, pitch and pan</li>
+						<li>if duration is falsy, the note is considered a oneshot, will play full duration</li>
+					</aside>
 				</section>
 
 				<section data-background="#3c7fc1" class="inverted">
 					Make a metronome
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>ok, to start, we'll create a metronome with about 20 lines of code</li>
+					</aside>
 				</section>
 
 				<section>
 					Kit and oscillator template
 					<pre><code class="javascript">
+var bap = require('bap');
 var beep = bap.kit();
 
 var basic = bap.oscillator({
@@ -196,7 +170,10 @@ var basic = bap.oscillator({
 });
 
 </code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>first, include the bap toolkit and create a new kit</li>
+						<li>then create an oscillator, which we'll use as a template in the next step</li>
+					</aside>
 				</section>
 
 				<section>
@@ -209,7 +186,10 @@ var cloned = basic.with({ frequency: 440 });
 nextSlot.layer(cloned);
 beep.slot(2, nextSlot);
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>we use the "with" function to clone the oscillator with new parameters</li>
+						<li>the first and second parts have the same result, but shows that the object can be cached or put into a module along the way</li>
+					</aside>
 				</section>
 
 				<section>
@@ -217,13 +197,17 @@ beep.slot(2, nextSlot);
 					<pre><code class="javascript">
 var pattern = bap.pattern({ bars: 2, tempo: 140 });
 pattern.channel(1).add(
-  ['*.1.01', 'A1'],
+  ['*.1.01',   'A1'],
   ['*.2%1.01', 'A2']
 );
 
 pattern.kit('A', beep).start();
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>then we create a pattern to attach the notes to, with 2 bars</li>
+						<li>we add the notes using expressions, more on that in a second</li>
+						<li>finally, and very important, we connect the kit to the pattern with id "A", which connects A1 to beep slot 1, and A2 to beep slot 2</li>
+					</aside>
 				</section>
 
 				<section>
@@ -237,18 +221,31 @@ pattern.kit('A', beep).start();
 even.odd.%24	> 2.1.01, 2.1.25, 2.1.49, 2.1.73,
 		  2.3.01, 2.3.25, 2.3.49, 2.3.73
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>bap supports position expressions, because writing each note is lots of work</li>
+						<li>asterisk is wilcard and matches anything</li>
+						<li>odd or even are pretty self-explanatory</li>
+						<li>modulus with optional offset</li>
+						<li>more details in the docs</li>
+					</aside>
 				</section>
 
 				<section data-demo="metronome">
 					Metronome demo
 					<h1 class="position">0.0.00</h1>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>and that's the metronome demo</li>
+						<li>pretty cool, right?</li>
+					</aside>
 				</section>
 
 				<section data-background="#3c7fc1" class="inverted">
 					Make a boombap beat
-					<aside class="notes">To explain how Dilla works, I made a tutorial about making a boombap beat.<aside>
+					<aside class="notes">
+						<li>okey, let's get down to the main attraction</li>
+						<li>let's make a boombap beat, something simple</li>
+						<li>we'll need some drums, a few samples and a bass</li>
+					</aside>
 				</section>
 
 				<section>
@@ -263,7 +260,13 @@ drumKit.slot(3).layer(1, bap.sample({
   volume: 50
 }));
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>we start by creating a drumkit</li>
+						<li>we're gonna load 3 samples in to different slots</li>
+						<li>notice again, first the shorthand</li>
+						<li>then using other syntax to add params</li>
+						<li>these are all the same, except the volume of the hihat layer is at 50%</li>
+					</aside>
 				</section>
 
 				<section>
@@ -285,7 +288,12 @@ boombapPattern.channel(1).add(
   ['2.4.03', 'A2']
 );
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>then we need to create a pattern, 2 bars, to attach our notes</li>
+						<li>programming drums is a craft in itself, too big to take on in this session</li>
+						<li>but as you can see, I'm fond of lazy kicks and eager snares</li>
+						<li>if you're interested in the details, I've written about it on my website</li>
+					</aside>
 				</section>
 
 				<section>
@@ -299,13 +307,19 @@ boombapPattern.channel(2).add(
 
 boombapPattern.kit('A', drumKit).start();
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>let's add a hihat</li>
+						<li>and using expressions, we're not forced to repeat ourselves</li>
+						<li>connect the kit, and start playback</li>
+					</aside>
 				</section>
 
 				<section data-demo="boombap-drums">
 					Drums demo
 					<h1 class="position">0.0.00</h1>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>pretty barebones, but we're off to a good start</li>
+					</aside>
 				</section>
 
 				<section>
@@ -321,7 +335,12 @@ plongKit.slot(2).layer(bap.sample({
   duration: 60
 }));
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>next up is some samples</li>
+						<li>to lead, I've picked out two plongs</li>
+						<li>that we assemble into a kit</li>
+						<li>notice we set the duration in ticks, means we don't need to set in each note</li>
+					</aside>
 				</section>
 
 
@@ -336,13 +355,19 @@ boombapPattern.channel(3).add(
 
 boombapPattern.kit('B', plongKit).start();
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>schedule the plongs, and this should look familiar already</li>
+						<li>using the volume parameter, we can create a manual delay effect</li>
+						<li>more on that in a sec</li>
+					</aside>
 				</section>
 
 				<section data-demo="boombap-plongs">
 					Plongs demo
 					<h1 class="position">0.0.00</h1>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>so, the drums and plongs together</li>
+					</aside>
 				</section>
 
 				<section>
@@ -362,7 +387,11 @@ stringKit.slot(3).layer(bap.sample({
   duration: 45
 }));
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>after that, we need to add a secondary sample</li>
+						<li>I found a few string pads on a magnet disk somewhere</li>
+						<li>again, define the default duration in ticks</li>
+					</aside>
 				</section>
 
 
@@ -373,23 +402,29 @@ boombapPattern.channel(4).add(
   ['1.2.05', 'C03', null, 60],
   ['1.2.51', 'C03', null, 40],
   ['1.3.05', 'C03', null, 20],
-  ['1.3.51', 'C03', null, 5],
+  ['1.3.51', 'C03', null,  5],
   ['1.3.75', 'C01', null, 60],
   ['1.4.52', 'C01', null, 20],
   ['2.2.05', 'C03', null, 60],
   ['2.2.50', 'C02', null, 60],
-  ['2.3.25', 'C01', 70, 60],
-  ['2.4.01', 'C01', 85, 30],
-  ['2.4.75', 'C01', 85, 10]
+  ['2.3.25', 'C01', 70,   60],
+  ['2.4.01', 'C01', 85,   30],
+  ['2.4.75', 'C01', 85,   10]
 );
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>when we schedule the strings, we can use the volume parameter to create a detailed manual delay</li>
+						<li>also notice that on the last three notes, we override the default duration</li>
+					</aside>
 				</section>
 
 				<section data-demo="boombap-strings">
 					Strings demo
 					<h1 class="position">0.0.00</h1>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>we listen again, and it's starting to sounds like something</li>
+						<li>let's just add some bass, to balance it a bit</li>
+					</aside>
 				</section>
 
 				<section>
@@ -402,7 +437,10 @@ bassKit.slot(1).layer(bap.sample({
   release: 0.01
 }));
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>in this beat, we'll use one sample and pitch it in the notes</li>
+						<li>we apply a small attack and release to remove clicks and pops</li>
+					</aside>
 				</section>
 
 
@@ -410,27 +448,32 @@ bassKit.slot(1).layer(bap.sample({
 					Schedule the bass
 					<pre><code class="javascript">
 boombapPattern.channel(5).add(
-  ['1.1.01', 'D01', 60, 80, -90],
-  ['1.2.72', 'D01', 15, 50, -90],
-  ['1.3.02', 'D01', 40, 80, -90],
-  ['1.4.01', 'D01', 40, 60, -72],
-  ['1.4.51', 'D01', 100, 80, -52],
-  ['2.3.51', 'D01', 60, 80, -116],
-  ['2.4.51', 'D01', 40, 80, -96]
+  ['1.1.01', 'D01',  60, 80,  -90],
+  ['1.2.72', 'D01',  15, 50,  -90],
+  ['1.3.02', 'D01',  40, 80,  -90],
+  ['1.4.01', 'D01',  40, 60,  -72],
+  ['1.4.51', 'D01', 100, 80,  -52],
+  ['2.3.51', 'D01',  60, 80, -116],
+  ['2.4.51', 'D01',  40, 80,  -96]
 );
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>then we add some notes with different duration, volume and pitch, to make up the bassline</li>
+					</aside>
 				</section>
 
 				<section data-demo="boombap-bass">
 					Full beat demo
 					<h1 class="position">0.0.00</h1>
-					<aside class="notes"><aside>
+					<aside class="notes"></aside>
 				</section>
 
 				<section data-background="#3c7fc1" class="inverted">
 					Using slices
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>Last thing we'll do is have a look at slices</li>
+						<li>A slice is a section of a sample</li>
+					</aside>
 				</section>
 
 				<section>
@@ -451,7 +494,11 @@ sampleKit.slot(2).layer(base.with({
   length: 0.750
 }));
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>First, we create a kit and base sample</li>
+						<li>Then create layers that will play part of that sample</li>
+						<li>using the offset and length params, in seconds</li>
+					</aside>
 				</section>
 
 				<section>
@@ -466,7 +513,10 @@ sampleKit.slot(4).layer(base.with({
   length: 2
 }));
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>just two more slices</li>
+						<li>in this example, I knew all the slicepoints in advance, might not always be the case, more on that in a sec</li>
+					</aside>
 				</section>
 
 				<section>
@@ -478,17 +528,19 @@ pattern.channel(1).add(
   ['1.2.01', 'A1', 96],
   ['1.3.01', 'A2'],
   ['2.1.01', 'A3'],
-  ['2.2.80', 'A4', (96 * 2) + 16 ]
+  ['2.2.80', 'A4', (96 * 3) - 80 ]
 );
 pattern.kit('A', sampleKit).start();
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>to demo this, we create a pattern and throw in the sliced samples</li>
+					</aside>
 				</section>
 
 				<section data-demo="slices-sample">
 					Sliced sample demo
 					<h1 class="position">0.0.00</h1>
-					<aside class="notes"><aside>
+					<aside class="notes"></aside>
 				</section>
 
 
@@ -504,7 +556,12 @@ breakKit.slot(1).layer('sounds/kick.wav');
 breakKit.slot(2).layer('sounds/snare.wav');
 breakKit.slot(4).layer('sounds/snare.wav');
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>but let's say we have a breakbeat or loop</li>
+						<li>that is already cut to even beats</li>
+						<li>we can use the slice method to give us a kit sliced in 16 pieces</li>
+						<li>to fatten the sound, we add a second layer to a few of the slots that we'll be using</li>
+					</aside>
 				</section>
 
 				<section>
@@ -523,51 +580,49 @@ pattern.channel(2).add(
 );
 pattern.kit('B', breakKit).start();
 					</code></pre>
-					<aside class="notes"><aside>
+					<aside class="notes">
+						<li>schedule some notes, and attach the kit to our existing pattern</li>
+					</aside>
 				</section>
 
-				<section data-demo="slices-drums">
+				<!-- <section data-demo="slices-drums">
 					Sliced drums demo
 					<h1 class="position">0.0.00</h1>
-					<aside class="notes"><aside>
-				</section>
+					<aside class="notes"></aside>
+				</section> -->
 
 				<section data-demo="slices-full">
-					Sliced full demo
+					Sliced drums demo
 					<h1 class="position">0.0.00</h1>
-					<aside class="notes"><aside>
+					<aside class="notes"></aside>
 				</section>
 
 				<section>
 					<h1>bapjs.org</h1>
-					<aside class="notes">That's all we have time for today. Check out the package on npm, read the documentation, build some beats and give me feedback on how it works.</aside>
-				</section>
-
-				<section>
-					<h1>examples.bapjs.org</h1>
-					<aside class="notes">All examples from today are also online</aside>
-				</section>
-
-				<section>
-					<h1>adamrenklint.com</h1>
-					<aside class="notes">On my website is the original Dilla tutorial, some more about expressions and piece about how I program drums, called "Lazy kicks and eager snares"</aside>
+					<aside class="notes">
+						<li>that's all the time we have for today</li>
+						<li>check out this url to read the documentation, read and listen to examples, and send feedback, or fork the repo and contribute</li>
+					</aside>
 				</section>
 
 				<section>
 					For updates, follow on Twitter
 					<h1><a target="_blank" href="http://twitter.com/adamrenklint">@adamrenklint</a></h1>
-					<aside class="notes">The current version is the first public release, and I have lots of things planned for the near future. If you want to stay updated, follow me on Twitter.</aside>
-				</section>
-
-				<section>
-					<h1><a href="http://tiny.cc/boombap-slides" target="_blank">tiny.cc/boombap-slides</a></h1>
-					<aside class="notes">Link to todays slides</aside>
+					<aside class="notes">
+						<li>this is the first public release and there are lots of things planned for the near future</li>
+						<li>follow me on twitter if you want to stay up to date about it</li>
+						<li>I'll also tweet a link for todays slides in a while, if you want to look through them again</li>
+					</aside>
 				</section>
 
 				<section>
 					Web Audio Weekly<br>by <a target="_blank" href="http://twitter.com/chrislowis">@chrislowis</a>
 					<h1><a target="_blank" href="http://tiny.cc/waw">tiny.cc/waw</a></h1>
-					<aside class="notes">Finally, an unrelated tip. WebAudioWeekly by Chris Lowis is a semi-regular newsletter with cool links regarding web audio things. Check it out.</aside>
+					<aside class="notes">
+						<li>finaly, I want to end with an unrelated tip</li>
+						<li>web audio weekly is a newsletter by Chris Lowis that comes out semi-regularly, with cool links regarding web audio things</li>
+						<li>worth checking out</li>
+					</aside>
 				</section>
 
 				<section>
