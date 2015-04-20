@@ -37,7 +37,8 @@ function draw () {
   window.requestAnimationFrame(draw);
 }
 
-draw();
-
-Reveal.addEventListener( 'slidechanged', onSlideChanged);
-startDemo(Reveal.getCurrentSlide());
+if (!~location.href.indexOf('receiver')) {
+  draw();
+  Reveal.addEventListener( 'slidechanged', onSlideChanged);
+  startDemo(Reveal.getCurrentSlide());
+}

@@ -15109,10 +15109,11 @@ function draw () {
   window.requestAnimationFrame(draw);
 }
 
-draw();
-
-Reveal.addEventListener( 'slidechanged', onSlideChanged);
-startDemo(Reveal.getCurrentSlide());
+if (!~location.href.indexOf('receiver')) {
+  draw();
+  Reveal.addEventListener( 'slidechanged', onSlideChanged);
+  startDemo(Reveal.getCurrentSlide());
+}
 
 },{"./boombap-01":215,"./boombap-02":216,"./boombap-03":217,"./boombap-04":218,"./metronome":220,"./slices-01":221,"./slices-02":222,"./slices-03":223,"dilla":191}],220:[function(require,module,exports){
 var bap = require('bap');
