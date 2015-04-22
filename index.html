@@ -33,13 +33,11 @@
 			<div class="slides">
 				<section data-background="#3c7fc1" class="inverted">
 					<h1>Making beats<br>with Bap and the Web Audio API</h1>
-				</section>
-
-				<section>
-					<h3>An introduction to composing <strong>music with code</strong>, using the browser as sequencer runtime and Javascript to schedule notes with <strong>precise rhythmic timing</strong></h3>
 					<aside class="notes">
-						<li>in short, we're gonna make beats</li>
-						<li>that can be played in modern browsers</li>
+						<li>ok cool, let's get started</li>
+						<li>today I'll be giving a short introduction on how to use a library called Bap to compose <strong>music with code</strong></li>
+						<li>with precise rhythmic timing</li>
+						<li>can be played in modern browsers</li>
 					</aside>
 				</section>
 
@@ -61,6 +59,7 @@
 					<h3><a target="_blank" href="http://adamrenklint.com">adamrenklint.com</a></h3>
 					<aside class="notes">
 						<li>aside from that, into making music</li>
+						<li>making beats and rapping on and off, last 15 years</li>
 						<li>mainly instrumental hiphop, golden era and boombap style</li>
 					</aside>
 				</section>
@@ -92,24 +91,8 @@
 				</section>
 
 				<section data-background="#3c7fc1" class="inverted">
-					<svg id="bap-logo" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" height="44.648mm" width="72.751mm" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" viewBox="0 0 257.77775 158.20313">
-					 <metadata id="metadata7">
-					  <rdf:RDF>
-					   <cc:Work rdf:about="">
-					    <dc:format>image/svg+xml</dc:format>
-					    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-					    <dc:title/>
-					   </cc:Work>
-					  </rdf:RDF>
-					 </metadata>
-					 <g id="layer1" transform="translate(-166.2 -236.35)">
-					  <g id="text3340">
-					   <path d="m205.75 293.48h-8.7891v-13.184h8.7891q16.348 0 27.949 11.602 11.602 11.514 11.602 27.949 0 16.348-11.602 27.949-11.602 11.602-27.949 11.602-16.348 0-27.949-11.602-11.602-11.602-11.602-27.949v-83.496h13.184v83.496q0 10.898 7.7344 18.633 7.7344 7.7344 18.633 7.7344 10.898 0 18.633-7.7344 7.7344-7.7344 7.7344-18.633 0-10.898-7.7344-18.633-7.7344-7.7344-18.633-7.7344z"/>
-					   <path d="m294.02 346.21h8.7891v13.184h-8.7891q-16.348 0-27.949-11.514-11.602-11.602-11.602-28.037 0-16.348 11.602-27.949 11.602-11.602 27.949-11.602 16.348 0 27.949 11.602 11.602 11.602 11.602 27.949v39.551h-13.184v-39.551q0-10.898-7.7344-18.633-7.7344-7.7344-18.633-7.7344-10.898 0-18.633 7.7344-7.7344 7.7344-7.7344 18.633 0 10.898 7.7344 18.633 7.7344 7.7344 18.633 7.7344z"/>
-					   <path d="m384.42 359.4h-8.7891v-13.184h8.7891q10.898 0 18.633-7.7344 7.7344-7.7344 7.7344-18.633 0-10.898-7.7344-18.633-7.7344-7.7344-18.633-7.7344-10.898 0-18.633 7.7344-7.7344 7.7344-7.7344 18.633v74.707h-13.184v-74.707q0-16.348 11.602-27.949 11.602-11.602 27.949-11.602 16.348 0 27.949 11.602 11.602 11.602 11.602 27.949 0 16.436-11.602 28.037-11.602 11.514-27.949 11.514z"/>
-					  </g>
-					 </g>
-					</svg>
+					<svg id="bap-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 266.56022 165.29128"><path d="M43.092 60.672H29.774V47.488h13.318c10.9 0 20.215 3.868 27.95 11.602 7.734 7.676 11.6 16.993 11.6 27.95 0 10.898-3.866 20.214-11.6 27.948-7.735 7.735-17.052 11.602-27.95 11.602s-20.215-3.867-27.95-11.602c-7.733-7.734-11.6-17.05-11.6-27.95V3.544h13.183V87.04c0 7.265 2.578 13.476 7.735 18.632 5.156 5.157 11.367 7.735 18.633 7.735 7.265 0 13.476-2.578 18.633-7.735 5.156-5.156 7.734-11.367 7.734-18.633 0-7.266-2.578-13.477-7.734-18.634-5.157-5.156-11.368-7.734-18.633-7.734zM131.362 113.402h13.32v13.184h-13.32c-10.898 0-20.215-3.838-27.95-11.514-7.733-7.734-11.6-17.08-11.6-28.037 0-10.898 3.867-20.215 11.6-27.95 7.736-7.733 17.052-11.6 27.95-11.6 10.9 0 20.215 3.867 27.95 11.6 7.734 7.736 11.6 17.052 11.6 27.95v39.55H157.73v-39.55c0-7.265-2.58-13.476-7.735-18.633-5.156-5.156-11.367-7.734-18.633-7.734-7.265 0-13.476 2.578-18.633 7.734-5.157 5.157-7.736 11.368-7.736 18.633 0 7.266 2.58 13.477 7.735 18.633 5.155 5.157 11.366 7.735 18.632 7.735zM223.468 126.592l-13.377.06v-13.185l13.378-.06c7.266-.03 13.477-2.577 18.633-7.733 5.158-5.156 7.736-11.367 7.736-18.633 0-7.264-2.578-13.475-7.735-18.632-5.155-5.156-11.366-7.734-18.632-7.734-7.265 0-13.476 2.578-18.633 7.734-5.156 5.156-7.734 11.367-7.734 18.633v74.708h-13.183V87.04c0-10.898 3.867-20.214 11.602-27.948 7.734-7.735 17.05-11.602 27.948-11.602 10.9 0 20.215 3.867 27.95 11.602 7.734 7.735 11.6 17.05 11.6 27.95 0 10.956-3.866 20.302-11.6 28.036-7.736 7.676-17.052 11.514-27.95 11.514z"/></svg>
+
 
 					<aside class="notes">
 						<li>so I built Bap</li>
@@ -119,7 +102,7 @@
 				</section>
 
 				<section>
-					Inspired by the "MPC workflow" and built to make all aspects of beatmaking completely <strong>modular</strong> and <strong>reusable</strong>.
+					Inspired by the "MPC workflow" and built to make all aspects of beatmaking completely <strong>modular</strong> and <strong>reusable</strong>
 					<aside class="notes">
 						<li>MPC workflow = find and chop sample, sequence slices</li>
 						<li>each fragment of a bap beat be its own commonJS module</li>
@@ -132,6 +115,7 @@
 				  <h1>1.1.01 - 1.4.96</h1>
 				  <aside class="notes">
 						<li>uses same timing and position format as oldschool MPCs</li>
+						<li>positions are written BAR dot BEAT dot tick</li>
 						<li>meaning one normal bar goes from 1.1.01 to 1.4.96</li>
 					</aside>
 				</section>
@@ -141,15 +125,16 @@
 					<aside class="notes">
 						<li>Let's look at the fundamental concepts</li>
 						<li>kits are instruments, or programs in mpc terms</li>
-						<li>they have slots, which contain infinite layers</li>
+						<li>they have numbered slots, which contain infinite layers</li>
+						<li>and a layer is a sample or oscillator, or could be any kind of subclass of an existing layer</li>
 					</aside>
 				</section>
 
 				<section>
 					<strong>Patterns</strong> are playable collections of <strong>channels</strong> containing <strong>notes</strong>, and connect with kits
 					<aside class="notes">
-						<li>patterns are playable loops, that contain channels, that contains notes</li>
-						<li>the developer connects a pattern with one or more kits</li>
+						<li>patterns are playable loops, that contain numbered channels, that contains notes</li>
+						<li>the developer connects a pattern with one or more kits, like we'll see in a moment</li>
 					</aside>
 				</section>
 
@@ -157,7 +142,7 @@
 					Note parameters
 					<pre><code class="javascript">
  position  key    duration  vol  pitch  pan  other
-['1.101',  'A2',  49,       75,  -50,   100, {...}]
+['1.1.01', 'A2',  48,       75,  -50,   100, {...}]
 
 </code></pre>
 					<aside class="notes">
@@ -241,6 +226,7 @@ even.odd.%24	> 2.1.01, 2.1.25, 2.1.49, 2.1.73,
 					</code></pre>
 					<aside class="notes">
 						<li>bap supports position expressions, because writing each note is lots of work</li>
+						<li>expressions are evaluated and expanded</li>
 						<li>asterisk is wilcard and matches anything</li>
 						<li>odd or even are pretty self-explanatory</li>
 						<li>modulus with optional offset</li>
@@ -254,6 +240,7 @@ even.odd.%24	> 2.1.01, 2.1.25, 2.1.49, 2.1.73,
 					<aside class="notes">
 						<li>and that's the metronome demo</li>
 						<li>pretty cool, right?</li>
+						<li>you can't imagine how many hours I've spent listening to this metronome and the 20 incarnations that came before it</li>
 					</aside>
 				</section>
 
@@ -633,7 +620,7 @@ pattern.kit('B', breakKit).start();
 					</aside>
 				</section>
 
-				<section>
+				<!-- <section>
 					Web Audio Weekly<br>by <a target="_blank" href="http://twitter.com/chrislowis">@chrislowis</a>
 					<h1><a target="_blank" href="http://tiny.cc/waw">tiny.cc/waw</a></h1>
 					<aside class="notes">
@@ -641,7 +628,7 @@ pattern.kit('B', breakKit).start();
 						<li>web audio weekly is a newsletter by Chris Lowis that comes out semi-regularly, with cool links regarding web audio things</li>
 						<li>worth checking out</li>
 					</aside>
-				</section>
+				</section> -->
 
 				<section>
 					Danke :)
@@ -682,5 +669,18 @@ pattern.kit('B', breakKit).start();
 
 		</script>
     <script src="dist/main.js"></script>
+
+		<script>
+		if (window.location.hostname === 'adamrenklint.com') {
+
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-18822343-1', 'adamrenklint.com');
+		ga('send', 'pageview');
+		}
+		</script>
 	</body>
 </html>
